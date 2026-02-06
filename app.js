@@ -9,8 +9,33 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortfolio();
     initNavigation();
     initScrollAnimations();
+    initAdvancedScrollEffects();
     initContactForm();
 });
+
+// ==========================================
+// ENHANCED SCROLL EFFECTS
+// ==========================================
+function initAdvancedScrollEffects() {
+    let ticking = false;
+    
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                const navbar = document.getElementById('navbar');
+                
+                // Subtle background shift based on scroll
+                if (scrollY > 0) {
+                    document.body.style.setProperty('--scroll-y', `${scrollY}px`);
+                }
+                
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+}
 
 // ==========================================
 // INITIALIZE PORTFOLIO CONTENT
@@ -324,29 +349,34 @@ function initNavigation() {
 function initScrollAnimations() {
     const observerOptions = {
         root: null,
-        rootMargin: '0px',
-        threshold: 0.1
+        rootMargin: '-50px',
+        threshold: [0, 0.1, 0.5]
     };
 
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
+                // Add staggered animation delay for multiple elements
+                const delay = index * 80;
+                entry.target.style.animationDelay = `${delay}ms`;
                 entry.target.classList.add('visible');
 
-                // Animate skill bars if they're skill items
+                // Animate skill bars when visible
                 const skillBars = entry.target.querySelectorAll('.skill-progress');
-                skillBars.forEach(bar => {
-                    const level = bar.dataset.level;
-                    setTimeout(() => {
-                        bar.style.width = `${level}%`;
-                    }, 200);
-                });
+                if (skillBars.length > 0) {
+                    skillBars.forEach((bar, barIndex) => {
+                        const level = bar.getAttribute('data-level') || bar.style.width;
+                        setTimeout(() => {
+                            bar.style.width = `${level}`;
+                        }, 300 + (barIndex * 100));
+                    });
+                }
             }
         });
     }, observerOptions);
 
-    // Observe all animated elements
-    document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+    // Observe all animated elements including cards
+    document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .skill-category, .project-card, .achievement-card').forEach(el => {
         observer.observe(el);
     });
 }
