@@ -1346,6 +1346,30 @@ footer {
 }
 
 /* ==========================================
+   GSAP ANIMATION SUPPORT
+   ========================================== */
+/* 3D Transform support for GSAP animations */
+.project-card,
+.achievement-card,
+.timeline-item,
+.skill-category {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.btn {
+  will-change: transform;
+  transition: none; /* GSAP handles transitions */
+}
+
+.hero-image-wrapper,
+.about-image {
+  perspective: 1200px;
+  will-change: transform;
+}
+
+/* ==========================================
    RESPONSIVE DESIGN
    ========================================== */
 @media (max-width: 992px) {

@@ -347,38 +347,9 @@ function initNavigation() {
 // SCROLL ANIMATIONS
 // ==========================================
 function initScrollAnimations() {
-    const observerOptions = {
-        root: null,
-        rootMargin: '-50px',
-        threshold: [0, 0.1, 0.5]
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Add staggered animation delay for multiple elements
-                const delay = index * 80;
-                entry.target.style.animationDelay = `${delay}ms`;
-                entry.target.classList.add('visible');
-
-                // Animate skill bars when visible
-                const skillBars = entry.target.querySelectorAll('.skill-progress');
-                if (skillBars.length > 0) {
-                    skillBars.forEach((bar, barIndex) => {
-                        const level = bar.getAttribute('data-level') || bar.style.width;
-                        setTimeout(() => {
-                            bar.style.width = `${level}`;
-                        }, 300 + (barIndex * 100));
-                    });
-                }
-            }
-        });
-    }, observerOptions);
-
-    // Observe all animated elements including cards
-    document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .skill-category, .project-card, .achievement-card').forEach(el => {
-        observer.observe(el);
-    });
+    // GSAP animations are now handled by animations.js
+    // This function is kept for backwards compatibility
+    // ScrollTrigger.refresh() is called if needed after dynamic content
 }
 
 // ==========================================
